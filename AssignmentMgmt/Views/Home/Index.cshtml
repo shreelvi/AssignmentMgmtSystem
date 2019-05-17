@@ -1,27 +1,33 @@
-﻿@{
+﻿@using AssignmentMgmt.Models
+@model LoginModel
+
+@{
     ViewData["Title"] = "Assignment Management";
 }
 
-@using AssignmentMgmt.Models
-@model LoginModel
+
 <p style="color:red">@ViewData["LoginError"]</p>
 <div class="row">
-    <div class="col-md-5">
-        <h1 style="color:darkorange">Idaho State University, College of Business -- Class Web</h1><br />
-        <h2>Welcome to Class Web</h2>
-        <p>
-            This website allows students enroll in class and manage
-            assignments for classes taken each semester. It has three main roles:
-            Professor, Student and Admin. Professors can add a class, add students
-            in the class, CRUD and grade assignments. Admin has features such
-            as manage users, manage assignments, manage roles etc.<br /><br />
-            <br /><br />
-        </p>
+    <div class="col-md-7">
+        <h1 style="color: chocolate; font-family: 'Open Sans', sans-serif; font-size: 30px; font-weight: 300;">Assignment Management System <br />[Demo]</h1><br />
+        <h2 style="color: #111; font-family: 'Open Sans', sans-serif; font-size: 30px; font-weight: 300;">Welcome</h2><br />
+        <div style="width: 60%">
+            <p style="color: #685206; font-family: 'Helvetica Neue', sans-serif; font-size: 14px; line-height: 24px; margin: 0 0 24px;">
+                This website allows students to register for account and enroll in class and manage
+                assignments for classes taken each semester. It has three main roles:
+                Professor, Student and Admin. Professors can add a class, add students
+                in the class, CRUD and grade assignments. Admin has features such
+                as manage users, manage assignments, manage roles etc.<br />
+                Find the code in my repository.<br /><br />
+                <br /><br />
+            </p>
+        </div>
+
     </div>
-    <div class="col-md-6">
+    <div class="col-md-3">
         <section>
             <form asp-controller="Account" asp-action="Login" method="post">
-                <h3 style="color:darkorange">Login to ClassWeb.</h3>
+                <h3 style="color:chocolate">Login to your account.</h3>
                 <hr />
                 <p class="alert-warning">@TempData["UserAddError"]</p>
                 <p class="alert-success">@TempData["UserAddSuccess"]</p>
@@ -55,8 +61,8 @@
                         <a asp-action="ResetPasswordEmail" asp-controller="Account" class="text-danger brea">Forget password?</a>
                     </div>
                     <div>
-                        </br>
-                        <a asp-controller="Account" asp-action="AddUser">Register as a new user</a>
+                        <br />
+                        <a asp-controller="Account" asp-action="Register">Register as a new user</a>
                     </div>
                 </div>
             </form>

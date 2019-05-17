@@ -157,8 +157,46 @@ namespace AssignmentMgmt.Model
         #endregion
 
 
+        #region Login
+        ///<summary>
+        /// Gets the User from the database corresponding to the Username
+        /// Reference: Github, PeerEval Project
+        /// </summary>
+        /// <remarks></remarks>
+        public static User GetUser(string userName, string password)
+        {
 
+            MySqlCommand comm = new MySqlCommand("sproc_GetUserByUserName");
+            User retObj = null;
+            try
+            {
+                comm.Parameters.AddWithValue("@" + User.db_UserName, userName);
+                MySqlDataReader dr = GetDataReader(comm);
+                while (dr.Read())
+                {
+                    retObj = new User(dr);
+                }
+                comm.Connection.Close();
+            }
+            catch (Exception ex)
+            {
+                comm.Connection.Close();
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+            }
 
+            //Verify password matches.
+            if (retObj != null)
+            {
+                if (!Tools.Hasher.IsValid(password, retObj.Salt, _Pepper, _Stretches, retObj.Password))
+                {
+                    retObj = null;
+                }
+            }
+
+            return retObj;
+
+        }
+        #endregion
 
         #region Section
         ///Created on: 04/01/2019
