@@ -29,6 +29,7 @@ namespace AssignmentMgmt.Model
 
         public static string _Pepper = "gLj23Epo084ioAnRfgoaHyskjasf"; //HACK: set here for now, will move elsewhere later.
         public static int _Stretches = 10000;
+
         private DAL()
         {
         }
@@ -410,9 +411,7 @@ namespace AssignmentMgmt.Model
         }
 
         #endregion
-
-
-        
+       
         #region Semester
         /// <summary>
         /// Gets the Classweb.Semester corresponding with the given ID
@@ -653,9 +652,126 @@ namespace AssignmentMgmt.Model
 
         #endregion
 
+        #region Role
+        /// <summary>
+        /// Get list of all Role CLassweb.objects from the database
+        /// Reference: Taken code from the peerval project
+        /// </summary>
+        /// <returns></returns>
+        public static List<Role> GetRoles()
+        {
+            MySqlCommand comm = new MySqlCommand("sproc_RolesGetAll");
+            List<Role> retList = new List<Role>();
+            try
+            {
+                comm.CommandType = System.Data.CommandType.StoredProcedure;
+                MySqlDataReader dr = GetDataReader(comm);
+                while (dr.Read())
+                {
+                    retList.Add(new Role(dr));
+                }
+                comm.Connection.Close();
+            }
+            catch (Exception ex)
+            {
+                comm.Connection.Close();
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+            }
+            return retList;
+        }
 
-       
-       
+        // <summary>
+        /// Attempts to add a database entry corresponding to the given Role
+        /// Reference: Taken code from the peerval project
+        /// </summary>
+        internal static int AddRole(Role obj)
+        {
+            if (obj == null) return -1;
+            MySqlCommand comm = new MySqlCommand("sproc_RoleAdd");
+            try
+            {
+                comm.Parameters.AddWithValue("@" + Role.db_Name, obj.Name);
+                comm.Parameters.AddWithValue("@" + Role.db_IsAdmin, obj.IsAdmin);
+                comm.Parameters.AddWithValue("@" + Role.db_Users, obj.Users.DAVESet);
+                comm.Parameters.AddWithValue("@" + Role.db_Role, obj.Roles.DAVESet);
+                comm.Parameters.AddWithValue("@" + Role.db_Assignment, obj.Assignment.DAVESet);
+                return AddObject(comm, "@" + Role.db_ID);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+            }
+            return -1;
+        }
+
+        /// <summary>
+        /// Gets the Classweb.Role corresponding with the given ID
+        /// Reference: Code taken from the peerval project
+        /// </summary>
+        /// <remarks></remarks>
+
+        public static Role GetRole(int id)
+        {
+            return Roles.Get(id);
+        }
+
+        /// <summary>
+        /// Attempts to the database entry corresponding to the given Role
+        /// Reference: Taken code from the peerval project
+        /// </summary>
+        internal static int UpdateRole(Role obj)
+        {
+            if (obj == null) return -1;
+            MySqlCommand comm = new MySqlCommand("sproc_RoleUpdate");
+            try
+            {
+                comm.Parameters.AddWithValue("@" + Role.db_ID, obj.ID);
+                comm.Parameters.AddWithValue("@" + Role.db_Name, obj.Name);
+                comm.Parameters.AddWithValue("@" + Role.db_IsAdmin, obj.IsAdmin);
+                comm.Parameters.AddWithValue("@" + Role.db_Users, obj.Users.DAVESet);
+                comm.Parameters.AddWithValue("@" + Role.db_Role, obj.Roles.DAVESet);
+                comm.Parameters.AddWithValue("@" + Role.db_Assignment, obj.Assignment.DAVESet);
+                return UpdateObject(comm);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+            }
+            return -1;
+        }
+
+        internal static int RemoveRole(Role role)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        /// <summary>
+        /// Attempts to delete the database entry corresponding to the Role
+        /// </summary>
+        /// <remarks></remarks>
+        internal static int RemoveRole(int roleID)
+        {
+            if (roleID == 0) return -1;
+            MySqlCommand comm = new MySqlCommand();
+            try
+            {
+                comm.CommandText = "sproc_RoleRemove";
+                comm.Parameters.AddWithValue("@" + Role.db_ID, roleID);
+                return UpdateObject(comm);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+            }
+            return -1;
+        }
+
+
+        #endregion
+
+
+
     }
 }
 
