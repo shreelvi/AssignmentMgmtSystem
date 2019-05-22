@@ -7,3 +7,5 @@ Three main use cases: students are able to enroll in classes and upload, downloa
 - Notification will be sent to the classs professor about student enrollment.
 - While account verification, students are enrolled in the class.
 - More features....
+
+<p>It is currently under development. Browse to the project of repository for work insights.</p>
